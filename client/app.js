@@ -45,7 +45,7 @@ async function fetchData(filters, skip, limit) {
         }
         const result = await response.json();
 
-        const responseCount = await fetch(`http://31.172.66.180:8080/total_count?${filter}`);
+        const responseCount = await fetch(`http://31.172.66.180:808/total_count?${filter}`);
         if (!responseCount.ok) {
             throw new Error(`HTTP error! Status: ${responseCount.status}`);
         }

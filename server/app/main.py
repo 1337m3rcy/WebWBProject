@@ -10,13 +10,23 @@ from starlette.responses import StreamingResponse
 
 from typing import Union, Optional
 from io import TextIOBase, BytesIO
+import os
 
 import logging
 from . import models, database, schemas
 
+
+# Импортируем необходимые модули для статических файлов
+from fastapi.staticfiles import StaticFiles
+from starlette.staticfiles import StaticFiles as StarletteStaticFiles
+
 app = FastAPI(
     title='База данных ключевых запросов'
 )
+
+# Настройка статических файлов
+static_directory = os.path.join(os.path.dirname(__file__), '..', '..', 'client')
+app.mount("/static", StaticFiles(directory=static_directory), name="static")
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
