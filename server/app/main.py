@@ -34,8 +34,8 @@ logger = logging.getLogger(__name__)
 origins = [
     "http://localhost",
     "http://127.0.0.1:5500",  # Пример для локального разработчика
-    "http://245409.fornex.cloud:81",  # Добавленный домен и порт
-    "http://31.172.66.180:81"  # Добавленный IP-адрес и порт
+    "http://245409.fornex.cloud",  # Добавленный домен и порт
+    "http://31.172.66.180"  # Добавленный IP-адрес и порт
 ]
 
 app.add_middleware(
