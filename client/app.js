@@ -39,13 +39,13 @@ async function fetchData(filters, skip, limit) {
         .join("&");
 
     try {
-        const response = await fetch(`http://localhost:8000/data?${filter}&skip=${skip}&limit=${limit}`);
+        const response = await fetch(`http://31.172.66.180:8080/data?${filter}&skip=${skip}&limit=${limit}`);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const result = await response.json();
 
-        const responseCount = await fetch(`http://localhost:8000/total_count?${filter}`);
+        const responseCount = await fetch(`http://31.172.66.180:8080/total_count?${filter}`);
         if (!responseCount.ok) {
             throw new Error(`HTTP error! Status: ${responseCount.status}`);
         }
