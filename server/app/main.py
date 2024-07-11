@@ -12,7 +12,7 @@ from typing import Union, Optional
 from io import TextIOBase, BytesIO
 
 import logging
-from . import models, schemas, database
+from . import models, database, schemas
 
 app = FastAPI(
     title='База данных ключевых запросов'

@@ -13,13 +13,11 @@ RUN pip install --upgrade pip
 COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Копирование серверной части в контейнер
-COPY server/app /app
-
-# Копирование клиентской части в контейнер
-COPY client /client
-
+# Установите рабочую директорию
 WORKDIR /app
+
+# Скопируйте файлы проекта в контейнер
+COPY . .
 
 # Команда для запуска FastAPI сервера с uvicorn
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
