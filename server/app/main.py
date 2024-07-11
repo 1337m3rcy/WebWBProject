@@ -35,14 +35,16 @@ origins = [
     "http://localhost",
     "http://127.0.0.1:5500",  # Пример для локального разработчика
     "http://245409.fornex.cloud",  # Добавленный домен и порт
-    "http://31.172.66.180"  # Добавленный IP-адрес и порт
+    "http://245409.fornex.cloud:81",
+    "http://31.172.66.180",  # Добавленный IP-адрес и порт
+    "http://31.172.66.180:81"
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT"],
     allow_headers=["*"],
 )
 

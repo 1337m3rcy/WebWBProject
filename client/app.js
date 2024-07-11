@@ -39,7 +39,15 @@ async function fetchData(filters, skip, limit) {
         .join("&");
 
     try {
-        const response = await fetch(`http://31.172.66.180:8080/data?${filter}&skip=${skip}&limit=${limit}`);
+        const url = `http://31.172.66.180:8080/data?${filter}&skip=${skip}&limit=${limit}`;
+
+        const response = await fetch(url, {
+            method: 'GET', // Явно указываем метод GET
+            headers: {
+                'Content-Type': 'application/json',
+                // Другие необходимые заголовки, если требуется
+            },
+        });
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
