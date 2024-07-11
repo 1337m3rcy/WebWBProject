@@ -13,9 +13,7 @@ from io import TextIOBase, BytesIO
 import os
 
 import logging
-import models
-import database
-import schemas
+from server.app import models, database, schemas
 
 # Импортируем необходимые модули для статических файлов
 from fastapi.staticfiles import StaticFiles
