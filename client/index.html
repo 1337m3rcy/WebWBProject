@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Data Table</title>
+		<link type="text/css" rel="stylesheet" href="main.css" />
+		<script defer src="app.js"></script>
+		<!-- Add to your HTML head -->
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css"
+		/>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+	</head>
+	<body>
+		<h1>Data Table</h1>
+		<input type="text" id="filterInput" placeholder="Выгрузить по имени" />
+		<button onclick="resetData()">Выгрузка по имени</button>
+		<button onclick="downloadCSV()">Загрузить в CSV</button>
+		<button id="showHide">Добавить фильтры</button>
+		<div id="filterContainer" class="formHide">
+			<form id="filterForm">
+				<label for="nameFilter">Ключевой запрос:</label>
+				<input type="text" id="nameFilter" name="nameFilter" />
+
+				<label for="poolFilter">Количество запросов:</label>
+				<input type="number" id="poolFilter" name="poolFilter" />
+				<select id="poolFilterType" name="poolFilterType">
+					<option value="greater">Больше</option>
+					<option value="less">Меньше</option>
+				</select>
+
+				<label for="competitorsFilter">Количество конкурентов:</label>
+				<input
+					type="number"
+					id="competitorsFilter"
+					name="competitorsFilter"
+				/>
+				<select id="competitorsFilterType" name="competitorsFilterType">
+					<option value="greater">Больше</option>
+					<option value="less">Меньше</option>
+				</select>
+
+				<label for="growthFilter">Рост %:</label>
+				<input type="number" id="growthFilter" name="growthFilter" />
+				<select id="growthFilterType" name="growthFilterType">
+					<option value="greater">Больше</option>
+					<option value="less">Меньше</option>
+				</select>
+
+				<button type="submit">Подтвердить фильтры</button>
+			</form>
+		</div>
+		<div id="resultsInfo">
+			<span id="totalResults">Всего результатов: 0</span>
+		</div>
+		<table id="dataTable" class="container">
+			<thead>
+				<tr>
+					<th style="width: 275px">Ключевой запрос</th>
+					<th style="width: 20px">Category</th>
+					<th style="width: 100px">Количество запросов</th>
+					<th style="width: 75px">Количество конкурентов</th>
+					<th style="width: 75px">Рост %</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+	</body>
+</html>
