@@ -214,7 +214,7 @@ async function downloadCSV() {
 
 	try {
 		const response = await fetch(
-			`http://localhost:8000/export_csv?${filter}`,
+			`http://31.172.66.180:8080/export_csv?${filter}`,
 			{
 				method: "GET",
 				headers: {
