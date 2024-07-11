@@ -13,8 +13,9 @@ from io import TextIOBase, BytesIO
 import os
 
 import logging
-from . import models, database, schemas
-
+import models
+import database
+import schemas
 
 # Импортируем необходимые модули для статических файлов
 from fastapi.staticfiles import StaticFiles
