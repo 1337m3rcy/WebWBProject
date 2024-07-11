@@ -21,5 +21,5 @@ COPY . .
 
 # Команда для запуска FastAPI сервера с uvicorn
 #CMD ["uvicorn", "server.app.main:app", "--host", "0.0.0.0", "--port", "8080"]
-CMD ["uvicorn", "server.app.app:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "server.app.main:app", "--host", "0.0.0.0", "--port", "8080"]
 
