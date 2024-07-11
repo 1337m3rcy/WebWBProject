@@ -20,5 +20,5 @@ WORKDIR /app
 COPY . .
 
 # Команда для запуска FastAPI сервера с uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "server.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 
