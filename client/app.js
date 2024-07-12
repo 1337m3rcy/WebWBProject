@@ -128,7 +128,7 @@ document
 			// 	`http://localhost:8000/total_count?${filter}&queryFunction=updateResults`
 			// );
 			const response = await fetch(
-				`http://31.172.66.180:81/total_count?${filter}&queryFunction=updateResults`
+				`http://31.172.66.180:8080/total_count?${filter}&queryFunction=updateResults`
 			);
 			if (response.ok) {
 				const totalResults = await response.json();
