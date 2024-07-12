@@ -46,7 +46,7 @@ async function fetchData(filters, skip, limit, queryFunction) {
 		.join("&");
 
 	try {
-		const url = `http://localhost:8000/data?${filter}&skip=${skip}&limit=${limit}&queryFunction=${queryFunction}`;
+		const url = `http://31.172.66.180:8080/data?${filter}&skip=${skip}&limit=${limit}&queryFunction=${queryFunction}`;
 
 		console.log(filter);
 		const response = await fetch(url, {
@@ -61,7 +61,7 @@ async function fetchData(filters, skip, limit, queryFunction) {
 		const result = await response.json();
 
 		const responseCount = await fetch(
-			`http://localhost:8000/total_count?${filter}&queryFunction=${queryFunction}`
+			`http://31.172.66.180:8080/total_count?${filter}&queryFunction=${queryFunction}`
 		);
 		if (!responseCount.ok) {
 			throw new Error(`HTTP error! Status: ${responseCount.status}`);
@@ -176,7 +176,7 @@ async function downloadCSV() {
 
 	try {
 		const response = await fetch(
-			`http://localhost:8000/export_csv?${filter}&queryFunction=downloadCSV`,
+			`http://31.172.66.180:8080/export_csv?${filter}&queryFunction=downloadCSV`,
 			{
 				method: "GET",
 				headers: {
