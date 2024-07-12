@@ -4,7 +4,6 @@ FROM python:3.10-slim
 # Установка необходимых пакетов для компиляции зависимостей Python
 RUN apt-get update \
     && apt-get install -y --no-install-recommends build-essential \
-    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Установка pip и управление зависимостями Python
@@ -14,15 +13,13 @@ RUN pip install --upgrade pip
 WORKDIR /app
 
 # Копирование файла зависимостей и установка зависимостей
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+COPY requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt gunicorn
 
 # Скопируйте файлы проекта в контейнер
 COPY . .
 
-# Установить переменную окружения для настройки порта
-ENV PORT 8080
+# Команда для запуска FastAPI сервера с gunicorn
+CMD ["gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "server.app.main:app", "--bind", "0.0.0.0:8080"]
 
-# Команда для запуска FastAPI сервера с gunicorn и uvicorn worker
-CMD ["gunicorn", "-w", "2", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8080", "server.app.main:app"]
 
