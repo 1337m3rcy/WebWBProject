@@ -46,6 +46,7 @@ async function fetchData(filters, skip, limit, queryFunction) {
 		.join("&");
 
 	try {
+		//const url = `http://localhost:8000/data?${filter}&skip=${skip}&limit=${limit}&queryFunction=${queryFunction}`;
 		const url = `http://31.172.66.180:8080/data?${filter}&skip=${skip}&limit=${limit}&queryFunction=${queryFunction}`;
 
 		console.log(filter);
@@ -59,14 +60,6 @@ async function fetchData(filters, skip, limit, queryFunction) {
 			throw new Error(`HTTP error! Status: ${response.status}`);
 		}
 		const result = await response.json();
-
-		const responseCount = await fetch(
-			`http://31.172.66.180:8080/total_count?${filter}&queryFunction=${queryFunction}`
-		);
-		if (!responseCount.ok) {
-			throw new Error(`HTTP error! Status: ${responseCount.status}`);
-		}
-		const totalCount = await responseCount.json();
 
 		const dataTable = document
 			.getElementById("dataTable")
@@ -95,12 +88,6 @@ async function fetchData(filters, skip, limit, queryFunction) {
 				});
 			});
 		});
-
-		totalResults = totalCount;
-		document.getElementById(
-			"totalResults"
-		).innerText = `Всего результатов: ${totalResults}`;
-		updateResultsCounter();
 	} catch (error) {
 		console.error("Failed to fetch data:", error);
 	} finally {
@@ -109,10 +96,58 @@ async function fetchData(filters, skip, limit, queryFunction) {
 	}
 }
 
-function updateResultsCounter() {
-	const totalResultsElement = document.getElementById("totalResults");
-	totalResultsElement.textContent = `Всего результатов: ${totalResults}`;
-}
+document
+	.getElementById("updateResultsBtn")
+	.addEventListener("click", async function () {
+		const filterForm = document.getElementById("filterForm");
+		const formData = new FormData(filterForm);
+
+		NProgress.start();
+
+		const filterParams = {
+			name: formData.get("nameFilter") || null,
+			pool: formData.get("poolFilter") || null,
+			poolFilterType: formData.get("poolFilterType") || null,
+			competitorsCount: formData.get("competitorsFilter") || null,
+			competitorsFilterType:
+				formData.get("competitorsFilterType") || null,
+			growthPercent: formData.get("growthFilter") || null,
+			growthFilterType: formData.get("growthFilterType") || null,
+		};
+
+		const filter = Object.entries(filterParams)
+			.filter(
+				([key, value]) =>
+					value !== null && value !== undefined && value !== ""
+			)
+			.map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+			.join("&");
+
+		try {
+			// const response = await fetch(
+			// 	`http://localhost:8000/total_count?${filter}&queryFunction=updateResults`
+			// );
+			const response = await fetch(
+				`http://31.172.66.180:81/total_count?${filter}&queryFunction=updateResults`
+			);
+			if (response.ok) {
+				const totalResults = await response.json();
+				document.getElementById(
+					"totalResults"
+				).innerText = `Всего результатов: ${totalResults}`;
+			} else {
+				console.error(
+					"Ошибка при получении данных:",
+					response.statusText
+				);
+			}
+		} catch (error) {
+			console.error("Ошибка при выполнении запроса:", error);
+		} finally {
+			NProgress.done(); // Finish the progress bar
+			isLoading = false;
+		}
+	});
 
 window.addEventListener("scroll", loadMoreData);
 
@@ -175,6 +210,15 @@ async function downloadCSV() {
 	NProgress.start(); // Start the progress bar for download
 
 	try {
+		// const response = await fetch(
+		// 	`http://localhost:8000/export_csv?${filter}&queryFunction=downloadCSV`,
+		// 	{
+		// 		method: "GET",
+		// 		headers: {
+		// 			"Content-Type": "text/csv",
+		// 		},
+		// 	}
+		// );
 		const response = await fetch(
 			`http://31.172.66.180:8080/export_csv?${filter}&queryFunction=downloadCSV`,
 			{

@@ -15,8 +15,8 @@
 	</head>
 	<body>
 		<h1>Data Table</h1>
-		<button id="exportCSVButton">Загрузить в CSV</button>
-		<button id="showHide">Добавить фильтры</button>
+		<button class="btn" id="exportCSVButton">Загрузить в CSV</button>
+		<button class="btn" id="showHide">Добавить фильтры</button>
 		<div id="filterContainer" class="formHide">
 			<form id="filterForm">
 				<label for="nameFilter">Ключевой запрос:</label>
@@ -52,6 +52,9 @@
 		</div>
 		<div id="resultsInfo">
 			<span id="totalResults">Всего результатов: 0</span>
+			<button class="btn btn-results" id="updateResultsBtn">
+				Узнать количество результатов
+			</button>
 		</div>
 		<table id="dataTable" class="container">
 			<thead>

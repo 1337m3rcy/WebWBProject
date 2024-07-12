@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Index
 from server.app.database import Base
 
 
@@ -10,5 +10,4 @@ class MyTable(Base):
     pool = Column(Integer, index=True)
     competitors_count = Column(Integer, index=True)
     growth_percent = Column(Integer, index=True)
-
 

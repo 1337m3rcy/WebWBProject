@@ -7,32 +7,32 @@ h1 {
 	margin-bottom: 15px;
 }
 
-html, body {
-    font: 300 18px/1.6 "Source Sans Pro", sans-serif;
-    margin: 0;
-    padding: 5em 0 2em;
-    text-align: center;
-    overflow: auto;
+html,
+body {
+	font: 300 18px/1.6 "Source Sans Pro", sans-serif;
+	margin: 0;
+	padding: 5em 0 2em;
+	text-align: center;
+	overflow: auto;
 }
 
 .table-cell {
-    max-width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    cursor: pointer;
+	max-width: 200px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	cursor: pointer;
 }
 
 .table-cell.expanded {
-    white-space: normal;
-    overflow: visible;
-    text-overflow: clip;
+	white-space: normal;
+	overflow: visible;
+	text-overflow: clip;
 }
 
-
 .container {
-    max-height: 100%;
-    overflow-y: auto;
+	max-height: 100%;
+	overflow-y: auto;
 }
 table {
 	width: 100%;
@@ -57,10 +57,10 @@ th {
 	text-transform: uppercase;
 }
 td {
-  width: 100px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+	width: 100px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .formHide {
@@ -70,69 +70,57 @@ td {
 /* button */
 
 button {
-  text-align: center;
-  border: 0;
-  background: rgba(42, 50, 113, 0.28);
-  color: #6cacc5;
-  cursor: pointer;
-  margin: 0.25em;
-  width: 8em;
-  height: 3em;
-  border-radius: 10px;
-  transition: all 0.5s;
+	text-align: center;
+	border: 0;
+	background: rgba(42, 50, 113, 0.28);
+	color: #6cacc5;
+	cursor: pointer;
+	margin: 0.25em;
+	width: 8em;
+	height: 3em;
+	border-radius: 10px;
+	transition: all 0.5s;
 }
 
 .btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(101, 16, 180, 0.993);
+	transform: translateY(-3px);
+	box-shadow: 0 10px 20px rgba(101, 16, 180, 0.993);
 }
 
 .btn:active {
-    transform: translateY(-1px);
-    box-shadow: 0 5px 10px rgba(12, 179, 209, 0.925);
+	transform: translateY(-1px);
+	box-shadow: 0 5px 10px rgba(12, 179, 209, 0.925);
 }
 
 .btn::after {
-    content: "";
-    display: inline-block;
-    height: 2em;
-    width: 6em;
-    border-radius: 100px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    transition: all .4s;
+	content: "";
+	display: inline-block;
+	height: 2em;
+	width: 6em;
+	border-radius: 100px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: -1;
+	transition: all 0.4s;
 }
 
 .btn:hover::after {
-    transform: scaleX(1.4) scaleY(1.6);
-    opacity: 0;
+	transform: scaleX(1.4) scaleY(1.6);
+	opacity: 0;
 }
 
-.btn-animated {
-    animation: moveInBottom 5s ease-out;
-    animation-fill-mode: backwards;
+.btn-results {
+	width: 10em;
+	height: 3em;
 }
-
-@keyframes moveInBottom {
-    0% {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateY(0px);
-    }
-}
-
 
 /* input */
 
-.input {
-    width: 15%;
-    height: 12%;
+input {
+	width: 15%;
+	height: 12%;
+	border-radius: 6px;
 }
 
 /* demo styles */

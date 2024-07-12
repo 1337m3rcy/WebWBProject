@@ -93,29 +93,30 @@ def apply_filters(query, pool: Optional[int] = None, poolFilterType: Optional[st
                   competitorsCount: Optional[int] = None, competitorsFilterType: Optional[str] = None, growthPercent: Optional[int] = None,
                   growthFilterType: Optional[str] = None, filter: Optional[str] = None):
     filters = []
-    if filter is not None:
+    if filter:
         filters.append(models.MyTable.name.like(f"%{filter}%"))
 
-    if pool is not None and poolFilterType:
+    if pool is not None:
         if poolFilterType == "greater":
-            filters.append(models.MyTable.pool > pool)
+            filters.append(models.MyTable.pool >= pool)
         elif poolFilterType == "less":
-            filters.append(models.MyTable.pool < pool)
+            filters.append(models.MyTable.pool <= pool)
 
-    if competitorsCount is not None and competitorsFilterType:
+    if competitorsCount is not None:
         if competitorsFilterType == "greater":
-            filters.append(models.MyTable.competitors_count > competitorsCount)
+            filters.append(models.MyTable.competitors_count >= competitorsCount)
         elif competitorsFilterType == "less":
-            filters.append(models.MyTable.competitors_count < competitorsCount)
+            filters.append(models.MyTable.competitors_count <= competitorsCount)
 
-    if growthFilterType and growthPercent is not None:
+    if growthPercent is not None:
         if growthFilterType == "greater":
-            filters.append(models.MyTable.growth_percent > growthPercent)
+            filters.append(models.MyTable.growth_percent >= growthPercent)
         elif growthFilterType == "less":
-            filters.append(models.MyTable.growth_percent < growthPercent)
+            filters.append(models.MyTable.growth_percent <= growthPercent)
 
     if filters:
         query = query.filter(and_(*filters))
+
     logger.info(f"Applied filters: {filters}")  # Проверяем SQL запрос с фильтрами
 
     return query
@@ -149,16 +150,16 @@ async def get_data(
     logger.info(f"IN GET_DATA Received request: {request.url}")
     query = select(models.MyTable)
 
-    logger.info(f"PARAMETERS HERE - {filter}\n FUNCTION HERE {queryFunction}")
+    logger.info(f"PARAMETERS HERE - {filter}\n FUNCTION HERE {queryFunction}\n FUNCTION HERE {pool}\n FUNCTION HERE {competitorsCount}\n FUNCTION HERE {growthPercent}")
 
     if filter is None or filter == "":
-        query = query.filter(models.MyTable.pool > 200)
+        query = query.filter(models.MyTable.pool >= 200)
 
-    if queryFunction == "filterFormSubmit":
-        if filter is not None and filter != "":
-            query = apply_filters(query, pool, poolFilterType, competitorsCount, competitorsFilterType, growthPercent, growthFilterType, filter)
+    if queryFunction in ["filterFormSubmit", "loadMoreData"]:
+        query = apply_filters(query, pool, poolFilterType, competitorsCount, competitorsFilterType, growthPercent, growthFilterType, filter)
 
     query = query.order_by(desc(models.MyTable.name)).offset(skip).limit(limit)
+
     result = await db.execute(query)
     data = result.scalars().all()
 
@@ -187,11 +188,10 @@ async def get_total_count_endpoint(
     logger.info(f"FILTER HERE HERE HERE - {filter}\nFUNCTION HERE {queryFunction}")
 
     if filter is None or filter == "":
-        query = query.filter(models.MyTable.pool > 200)
+        query = query.filter(models.MyTable.pool >= 200)
 
-    if queryFunction == "filterFormSubmit":
-        if filter is not None and filter != "":
-            query = apply_filters(query, pool, poolFilterType, competitorsCount, competitorsFilterType, growthPercent, growthFilterType, filter)
+    if queryFunction == "updateResults":
+        query = apply_filters(query, pool, poolFilterType, competitorsCount, competitorsFilterType, growthPercent, growthFilterType, filter)
 
     total_count = await db.execute(query)
     return total_count.scalar()
@@ -214,8 +214,7 @@ async def export_csv(
     query = select(models.MyTable)
 
     if queryFunction == "downloadCSV":
-        if filter is not None and filter != "":
-            query = apply_filters(query, pool, poolFilterType, competitorsCount, competitorsFilterType, growthPercent, growthFilterType, filter)
+        query = apply_filters(query, pool, poolFilterType, competitorsCount, competitorsFilterType, growthPercent, growthFilterType, filter)
     else:
         query = query.filter(models.MyTable.pool > 200)
 
