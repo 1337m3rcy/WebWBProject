@@ -156,9 +156,7 @@ async def get_data(
 
     if queryFunction == "filterFormSubmit":
         if filter is not None and filter != "":
-            query = query.filter(models.MyTable.name.like(f"%{filter}%"))
-    else:
-        query = apply_filters(query, pool, poolFilterType, competitorsCount, competitorsFilterType, growthPercent, growthFilterType)
+            query = apply_filters(query, pool, poolFilterType, competitorsCount, competitorsFilterType, growthPercent, growthFilterType, filter)
 
     query = query.order_by(desc(models.MyTable.name)).offset(skip).limit(limit)
     result = await db.execute(query)
@@ -193,9 +191,7 @@ async def get_total_count_endpoint(
 
     if queryFunction == "filterFormSubmit":
         if filter is not None and filter != "":
-            query = query.filter(models.MyTable.name.like(f"%{filter}%"))
-    else:
-        query = apply_filters(query, pool, poolFilterType, competitorsCount, competitorsFilterType, growthPercent, growthFilterType)
+            query = apply_filters(query, pool, poolFilterType, competitorsCount, competitorsFilterType, growthPercent, growthFilterType, filter)
 
     total_count = await db.execute(query)
     return total_count.scalar()
