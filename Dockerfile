@@ -20,6 +20,6 @@ RUN pip install --no-cache-dir -r /app/requirements.txt gunicorn
 COPY . .
 
 # Команда для запуска FastAPI сервера с gunicorn
-CMD ["gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "server.app.main:app", "--bind", "0.0.0.0:8080"]
-
+#CMD ["gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "server.app.main:app", "--bind", "0.0.0.0:8080"]
+CMD gunicorn server.app.main:app --workers 3 --worker-class uvicorn.workers.UvicornWorker --bind=0.0.0.0:8080
 
