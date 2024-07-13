@@ -145,7 +145,9 @@ async def get_data(
         limit: int = 300,
         db: Session = Depends(database.get_db),
         queryFunction: str = Query(None, alias="queryFunction"),
-        filter: str = Query(None, alias="name")
+        filter: str = Query(None, alias="name"),
+        order: str = Query(None, alias="order"),
+        column: str = Query(None, alias="column")
 ):
     logger.info(f"IN GET_DATA Received request: {request.url}")
     query = select(models.MyTable)
@@ -155,8 +157,15 @@ async def get_data(
     if filter is None or filter == "":
         query = query.filter(models.MyTable.pool >= 200)
 
-    if queryFunction in ["filterFormSubmit", "loadMoreData"]:
+    if queryFunction in ["filterFormSubmit", "loadMoreData", "sortData"]:
         query = apply_filters(query, pool, poolFilterType, competitorsCount, competitorsFilterType, growthPercent, growthFilterType, filter)
+
+    if column:
+        sort_column = getattr(models.MyTable, column)
+        if order == "desc":
+            query = query.order_by(desc(sort_column))
+        else:
+            query = query.order_by(asc(sort_column))
 
     query = query.order_by(desc(models.MyTable.name)).offset(skip).limit(limit)
 
