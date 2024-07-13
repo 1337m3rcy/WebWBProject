@@ -57,7 +57,7 @@ async function fetchData(
 
 	try {
 		// let url = `http://localhost:8000/data?${filter}&skip=${skip}&limit=${limit}&queryFunction=${queryFunction}`;
-		const url = `http://31.172.66.180:8080/data?${filter}&skip=${skip}&limit=${limit}&queryFunction=${queryFunction}`;
+		let url = `http://31.172.66.180:8080/data?${filter}&skip=${skip}&limit=${limit}&queryFunction=${queryFunction}`;
 
 		if (order && column) {
 			url += `&order=${order}&column=${column}`;
@@ -108,71 +108,6 @@ async function fetchData(
 		isLoading = false;
 	}
 }
-
-// async function fetchData(filters, skip, limit, queryFunction) {
-// 	if (isLoading) return;
-// 	isLoading = true;
-
-// 	NProgress.start(); // Start the progress bar
-
-// 	const filter = Object.entries(filters)
-// 		.filter(
-// 			([key, value]) =>
-// 				value !== null && value !== undefined && value !== ""
-// 		)
-// 		.map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-// 		.join("&");
-
-// 	try {
-// 		const url = `http://localhost:8000/data?${filter}&skip=${skip}&limit=${limit}&queryFunction=${queryFunction}`;
-// 		// const url = `http://31.172.66.180:8080/data?${filter}&skip=${skip}&limit=${limit}&queryFunction=${queryFunction}`;
-
-// 		console.log(filter);
-// 		const response = await fetch(url, {
-// 			method: "GET", // Явно указываем метод GET
-// 			headers: {
-// 				"Content-Type": "application/json",
-// 			},
-// 		});
-// 		if (!response.ok) {
-// 			throw new Error(`HTTP error! Status: ${response.status}`);
-// 		}
-// 		const result = await response.json();
-
-// 		const dataTable = document
-// 			.getElementById("dataTable")
-// 			.getElementsByTagName("tbody")[0];
-// 		if (skip === 0) {
-// 			dataTable.innerHTML = ""; // Очищаем таблицу перед добавлением новых данных, если это первая страница
-// 		}
-
-// 		result.data.forEach((row) => {
-// 			const newRow = dataTable.insertRow();
-// 			const cell1 = newRow.insertCell(0);
-// 			const cell2 = newRow.insertCell(1);
-// 			const cell3 = newRow.insertCell(2);
-// 			const cell4 = newRow.insertCell(3);
-// 			const cell5 = newRow.insertCell(4);
-// 			cell1.innerHTML = `<div class="table-cell">${row.name}</div>`;
-// 			cell2.innerHTML = `<div class="table-cell">${row.categories}</div>`;
-// 			cell3.innerHTML = `<div class="table-cell">${row.pool}</div>`;
-// 			cell4.innerHTML = `<div class="table-cell">${row.competitors_count}</div>`;
-// 			cell5.innerHTML = `<div class="table-cell">${row.growth_percent}</div>`;
-
-// 			// Добавляем обработчики кликов для каждой ячейки
-// 			newRow.querySelectorAll(".table-cell").forEach((cell) => {
-// 				cell.addEventListener("click", () => {
-// 					cell.classList.toggle("expanded"); // Переключаем класс expanded для ячейки при клике
-// 				});
-// 			});
-// 		});
-// 	} catch (error) {
-// 		console.error("Failed to fetch data:", error);
-// 	} finally {
-// 		NProgress.done(); // Finish the progress bar
-// 		isLoading = false;
-// 	}
-// }
 
 //Узнать количество результатов по применённым фильтрам и по дефолту
 
