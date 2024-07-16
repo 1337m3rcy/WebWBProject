@@ -101,6 +101,11 @@ button {
 	box-shadow: 0 5px 10px rgba(12, 179, 209, 0.925);
 }
 
+.button-table {
+	width: 12em;
+	height: 6em;
+}
+
 .btn::after {
 	content: "";
 	display: inline-block;

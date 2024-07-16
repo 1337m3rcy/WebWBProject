@@ -3,6 +3,8 @@ const pageSize = 300; // Установите количество элемен�
 let isLoading = false;
 let totalResults = 0;
 
+let currentTable = "stat4market";
+
 //Применение фильтров для выгрузки
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -28,6 +30,16 @@ document.addEventListener("DOMContentLoaded", () => {
 		console.log(filterParams.growthPercent);
 
 		fetchData(filterParams, 0, pageSize, "filterFormSubmit"); // Указываем имя функции
+	});
+
+	document.getElementById("loadStat4Market").addEventListener("click", () => {
+		currentTable = "stat4market";
+		fetchData({}, 0, pageSize);
+	});
+
+	document.getElementById("loadWbMyTop").addEventListener("click", () => {
+		currentTable = "wbmytop";
+		fetchData({}, 0, pageSize);
 	});
 
 	fetchData({ pool: 200, poolFilterType: "greater" }, 0, pageSize); // Загрузка данных при загрузке страницы с дефолтным фильтром
@@ -56,8 +68,8 @@ async function fetchData(
 		.join("&");
 
 	try {
-		// let url = `http://localhost:8000/data?${filter}&skip=${skip}&limit=${limit}&queryFunction=${queryFunction}`;
-		let url = `http://31.172.66.180:8080/data?${filter}&skip=${skip}&limit=${limit}&queryFunction=${queryFunction}`;
+		// let url = `http://localhost:8000/data?table=${currentTable}&${filter}&skip=${skip}&limit=${limit}&queryFunction=${queryFunction}`;
+		let url = `http://31.172.66.180:8080/data?table=${currentTable}&${filter}&skip=${skip}&limit=${limit}&queryFunction=${queryFunction}`;
 
 		if (order && column) {
 			url += `&order=${order}&column=${column}`;
@@ -140,10 +152,10 @@ document
 
 		try {
 			// const response = await fetch(
-			// 	`http://localhost:8000/total_count?${filter}&queryFunction=updateResults`
+			// 	`http://localhost:8000/total_count?table=${currentTable}&${filter}&queryFunction=updateResults`
 			// );
 			const response = await fetch(
-				`http://31.172.66.180:8080/total_count?${filter}&queryFunction=updateResults`
+				`http://31.172.66.180:8080/total_count?table=${currentTable}&${filter}&queryFunction=updateResults`
 			);
 			if (response.ok) {
 				const totalResults = await response.json();
@@ -231,7 +243,7 @@ async function downloadCSV() {
 
 	try {
 		// const response = await fetch(
-		// 	`http://localhost:8000/export_csv?${filter}&queryFunction=downloadCSV`,
+		// 	`http://localhost:8000/export_csv?table=${currentTable}&${filter}&queryFunction=downloadCSV`,
 		// 	{
 		// 		method: "GET",
 		// 		headers: {
@@ -240,7 +252,7 @@ async function downloadCSV() {
 		// 	}
 		// );
 		const response = await fetch(
-			`http://31.172.66.180:8080/export_csv?${filter}&queryFunction=downloadCSV`,
+			`http://31.172.66.180:8080/export_csv?table=${currentTable}&${filter}&queryFunction=downloadCSV`,
 			{
 				method: "GET",
 				headers: {
@@ -248,7 +260,6 @@ async function downloadCSV() {
 				},
 			}
 		);
-
 		if (!response.ok) {
 			console.error("Failed to download CSV:", response.statusText);
 			return;

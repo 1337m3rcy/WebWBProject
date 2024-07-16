@@ -7,7 +7,7 @@ class DataRow(BaseModel):
     categories: Optional[str] = None
     pool: int
     competitors_count: int
-    growth_percent: int
+    growth_percent: Optional[int] = None
 
     class Config:
         orm_mode = True
@@ -16,3 +16,4 @@ class DataRow(BaseModel):
 
 class DataResponse(BaseModel):
     data: List[DataRow]
+
