@@ -14,8 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		currentPage = 0; // Сброс страницы при новом фильтре
 		const formData = new FormData(filterForm);
 
-		console.log(growthFilter);
-
 		const filterParams = {
 			name: formData.get("nameFilter") || null,
 			pool: formData.get("poolFilter") || null,
@@ -32,20 +30,31 @@ document.addEventListener("DOMContentLoaded", () => {
 		fetchData(filterParams, 0, pageSize, "filterFormSubmit"); // Указываем имя функции
 	});
 
-	document.getElementById("loadStat4Market").addEventListener("click", () => {
+	const stat4MarketButton = document.getElementById("loadStat4Market");
+	const wbMyTopButton = document.getElementById("loadWbMyTop");
+
+	function setActiveButton(button) {
+		document
+			.querySelectorAll(".loadData-btn")
+			.forEach((btn) => btn.classList.remove("active"));
+		button.classList.add("active");
+	}
+
+	stat4MarketButton.addEventListener("click", () => {
 		currentTable = "stat4market";
+		setActiveButton(stat4MarketButton);
 		fetchData({}, 0, pageSize);
 	});
 
-	document.getElementById("loadWbMyTop").addEventListener("click", () => {
+	wbMyTopButton.addEventListener("click", () => {
 		currentTable = "wbmytop";
+		setActiveButton(wbMyTopButton);
 		fetchData({}, 0, pageSize);
 	});
 
 	fetchData({ pool: 200, poolFilterType: "greater" }, 0, pageSize); // Загрузка данных при загрузке страницы с дефолтным фильтром
 });
 
-//Функция для выгрузки данных.
 async function fetchData(
 	filters,
 	skip,
@@ -68,51 +77,25 @@ async function fetchData(
 		.join("&");
 
 	try {
-		// let url = `http://localhost:8000/data?table=${currentTable}&${filter}&skip=${skip}&limit=${limit}&queryFunction=${queryFunction}`;
 		let url = `http://31.172.66.180:8080/data?table=${currentTable}&${filter}&skip=${skip}&limit=${limit}&queryFunction=${queryFunction}`;
 
 		if (order && column) {
 			url += `&order=${order}&column=${column}`;
 		}
-		console.log(filter);
+
 		const response = await fetch(url, {
-			method: "GET", // Явно указываем метод GET
+			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
 			},
 		});
+
 		if (!response.ok) {
 			throw new Error(`HTTP error! Status: ${response.status}`);
 		}
+
 		const result = await response.json();
-
-		const dataTable = document
-			.getElementById("dataTable")
-			.getElementsByTagName("tbody")[0];
-		if (skip === 0) {
-			dataTable.innerHTML = ""; // Очищаем таблицу перед добавлением новых данных, если это первая страница
-		}
-
-		result.data.forEach((row) => {
-			const newRow = dataTable.insertRow();
-			const cell1 = newRow.insertCell(0);
-			const cell2 = newRow.insertCell(1);
-			const cell3 = newRow.insertCell(2);
-			const cell4 = newRow.insertCell(3);
-			const cell5 = newRow.insertCell(4);
-			cell1.innerHTML = `<div class="table-cell">${row.name}</div>`;
-			cell2.innerHTML = `<div class="table-cell">${row.categories}</div>`;
-			cell3.innerHTML = `<div class="table-cell">${row.pool}</div>`;
-			cell4.innerHTML = `<div class="table-cell">${row.competitors_count}</div>`;
-			cell5.innerHTML = `<div class="table-cell">${row.growth_percent}</div>`;
-
-			// Добавляем обработчики кликов для каждой ячейки
-			newRow.querySelectorAll(".table-cell").forEach((cell) => {
-				cell.addEventListener("click", () => {
-					cell.classList.toggle("expanded");
-				});
-			});
-		});
+		renderTable(result.data); // Call renderTable with the fetched data
 	} catch (error) {
 		console.error("Failed to fetch data:", error);
 	} finally {
@@ -331,13 +314,25 @@ function renderTable(data) {
 
 	data.forEach((row) => {
 		const tr = document.createElement("tr");
+
+		// Разделяем наименование и ссылку
+		const [name, url] = row.name.split("\n");
+
 		tr.innerHTML = `
-            <td>${row.name}</td>
-            <td>${row.category}</td>
+            <td>
+                <div class="table-cell" style="cursor: pointer;">${name}</div>
+            </td>
+            <td>  </td>
             <td>${row.pool}</td>
             <td>${row.competitors_count}</td>
             <td>${row.growth_percent}</td>
         `;
+
+		// Добавляем обработчик клика для первой ячейки
+		tr.querySelector(".table-cell").addEventListener("click", () => {
+			window.open(url, "_blank"); // Открываем ссылку в новой вкладке
+		});
+
 		tableBody.appendChild(tr);
 	});
 }
