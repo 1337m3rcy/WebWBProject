@@ -308,6 +308,13 @@ document.addEventListener("DOMContentLoaded", () => {
 	});
 });
 
+function generateWbMyTopLink(name) {
+	const baseUrl =
+		"https://www.wildberries.ru/catalog/0/search.aspx?xsearch=1&search=";
+	const searchQuery = encodeURIComponent(name); // Кодируем имя товара для URL
+	return `${baseUrl}${searchQuery}`;
+}
+
 function renderTable(data) {
 	const tableBody = document.querySelector("#dataTable tbody");
 	tableBody.innerHTML = "";
@@ -318,21 +325,67 @@ function renderTable(data) {
 		// Разделяем наименование и ссылку
 		const [name, url] = row.name.split("\n");
 
-		tr.innerHTML = `
-            <td>
-                <div class="table-cell" style="cursor: pointer;">${name}</div>
-            </td>
-            <td>  </td>
-            <td>${row.pool}</td>
-            <td>${row.competitors_count}</td>
-            <td>${row.growth_percent}</td>
-        `;
+		// Проверяем, является ли текущая таблица stat4market
+		if (currentTable === "stat4market") {
+			tr.innerHTML = `
+                <td>
+                    <div class="table-cell" style="cursor: default;">${name}</div>
+                </td>
+                <td> </td>
+                <td>${row.pool}</td>
+                <td>${row.competitors_count}</td>
+                <td>${row.growth_percent}</td>
+            `;
+			// Добавляем обработчик клика для первой ячейки только для wbmytop
+			tr.querySelector(".table-cell").addEventListener("click", () => {
+				window.open(url, "_blank"); // Открываем ссылку в новой вкладке
+			});
+		} else {
+			const wbMyTopLink = generateWbMyTopLink(name);
 
-		// Добавляем обработчик клика для первой ячейки
-		tr.querySelector(".table-cell").addEventListener("click", () => {
-			window.open(url, "_blank"); // Открываем ссылку в новой вкладке
-		});
+			tr.innerHTML = `
+                <td>
+                    <div class="table-cell" style="cursor: pointer;">${name}</div>
+                </td>
+                <td> </td>
+                <td>${row.pool}</td>
+                <td>${row.competitors_count}</td>
+                <td>${row.growth_percent}</td>
+            `;
 
+			tr.querySelector(".table-cell").addEventListener("click", () => {
+				window.open(wbMyTopLink, "_blank"); // Открываем сгенерированную ссылку
+			});
+		}
 		tableBody.appendChild(tr);
 	});
 }
+
+// function renderTable(data) {
+// 	const tableBody = document.querySelector("#dataTable tbody");
+// 	tableBody.innerHTML = "";
+
+// 	data.forEach((row) => {
+// 		const tr = document.createElement("tr");
+
+// 		// Разделяем наименование и ссылку
+// 		const [name, url] = row.name.split("\n");
+
+// 		tr.innerHTML = `
+//             <td>
+//                 <div class="table-cell" style="cursor: pointer;">${name}</div>
+//             </td>
+//             <td>  </td>
+//             <td>${row.pool}</td>
+//             <td>${row.competitors_count}</td>
+//             <td>${row.growth_percent}</td>
+//         `;
+
+// 		// Добавляем обработчик клика для первой ячейки
+// 		tr.querySelector(".table-cell").addEventListener("click", () => {
+// 			window.open(url, "_blank"); // Открываем ссылку в новой вкладке
+// 		});
+
+// 		tableBody.appendChild(tr);
+// 	});
+// }

@@ -17,10 +17,9 @@ body {
 }
 
 .table-cell {
-	max-width: 200px;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
+	white-space: normal; /* Позволяет переносить текст */
+	overflow: visible; /* Убедитесь, что переполнение отображается */
+	text-overflow: clip; /* Отключает обрезку текста с многоточием */
 	cursor: pointer;
 	text-align: center;
 	vertical-align: middle;
@@ -40,7 +39,7 @@ body {
 }
 table {
 	width: 100%;
-	table-layout: fixed;
+	table-layout: auto;
 	border-collapse: colapse;
 	border: 1px solid rgb(165, 114, 224, 0.6);
 }
@@ -65,10 +64,11 @@ th {
 }
 
 td {
-	width: 100px;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
+	width: auto; /* Уберите фиксированную ширину */
+	padding: 10px; /* Добавьте отступы для лучшего отображения */
+	white-space: normal; /* Позволяет переносить текст */
+	overflow: visible; /* Позволяет отображать весь текст */
+	text-overflow: clip; /* Отключает многоточие */
 	border: 1px solid rgb(165, 114, 224, 0.6);
 	text-align: center;
 	vertical-align: middle;
