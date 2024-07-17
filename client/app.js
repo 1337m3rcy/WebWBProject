@@ -78,7 +78,7 @@ async function fetchData(
 
 	try {
 		let url = `http://31.172.66.180:8080/data?table=${currentTable}&${filter}&skip=${skip}&limit=${limit}&queryFunction=${queryFunction}`;
-
+		// let url = `http://localhost:8000/data?table=${currentTable}&${filter}&skip=${skip}&limit=${limit}&queryFunction=${queryFunction}`;
 		if (order && column) {
 			url += `&order=${order}&column=${column}`;
 		}
@@ -92,6 +92,10 @@ async function fetchData(
 
 		if (!response.ok) {
 			throw new Error(`HTTP error! Status: ${response.status}`);
+		}
+
+		if (skip === 0) {
+			document.querySelector("#dataTable tbody").innerHTML = ""; // Очистка только в начале
 		}
 
 		const result = await response.json();
@@ -317,7 +321,6 @@ function generateWbMyTopLink(name) {
 
 function renderTable(data) {
 	const tableBody = document.querySelector("#dataTable tbody");
-	tableBody.innerHTML = "";
 
 	data.forEach((row) => {
 		const tr = document.createElement("tr");
@@ -332,7 +335,7 @@ function renderTable(data) {
                     <div class="table-cell" style="cursor: default;">${name}</div>
                 </td>
                 <td> </td>
-                <td>${row.pool}</td>
+                <td>${row.pool}</td>	
                 <td>${row.competitors_count}</td>
                 <td>${row.growth_percent}</td>
             `;
@@ -360,32 +363,3 @@ function renderTable(data) {
 		tableBody.appendChild(tr);
 	});
 }
-
-// function renderTable(data) {
-// 	const tableBody = document.querySelector("#dataTable tbody");
-// 	tableBody.innerHTML = "";
-
-// 	data.forEach((row) => {
-// 		const tr = document.createElement("tr");
-
-// 		// Разделяем наименование и ссылку
-// 		const [name, url] = row.name.split("\n");
-
-// 		tr.innerHTML = `
-//             <td>
-//                 <div class="table-cell" style="cursor: pointer;">${name}</div>
-//             </td>
-//             <td>  </td>
-//             <td>${row.pool}</td>
-//             <td>${row.competitors_count}</td>
-//             <td>${row.growth_percent}</td>
-//         `;
-
-// 		// Добавляем обработчик клика для первой ячейки
-// 		tr.querySelector(".table-cell").addEventListener("click", () => {
-// 			window.open(url, "_blank"); // Открываем ссылку в новой вкладке
-// 		});
-
-// 		tableBody.appendChild(tr);
-// 	});
-// }
