@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Index
+from sqlalchemy import Column, Integer, String, Index, DateTime
 from server.app.database import Base
 
 
@@ -10,6 +10,7 @@ class Stat4Market(Base):
     pool = Column(Integer, index=True)
     competitors_count = Column(Integer, index=True)
     growth_percent = Column(Integer, index=True)
+    timestamp = Column(DateTime, index=True)
 
 
 class WbMyTop(Base):
@@ -21,3 +22,4 @@ class WbMyTop(Base):
     pool = Column(Integer, index=True)
     competitors_count = Column(Integer, index=True)
     growth_percent = Column(Integer, index=True)
+    timestamp = Column(DateTime, index=True)

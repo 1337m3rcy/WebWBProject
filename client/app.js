@@ -179,6 +179,35 @@ document
 		downloadCSV();
 	});
 
+document.addEventListener("DOMContentLoaded", function () {
+	fetchLastUpdate("stat4market");
+	fetchLastUpdate("wbmytop");
+});
+
+async function fetchLastUpdate(table) {
+	try {
+		// const response = await fetch(
+		// 	`http://localhost:8000/last_update?table=${table}`
+		// );
+		const response = await fetch(
+			`http://31.172.66.180:8080/last_update?table=${table}`
+		);
+		const data = await response.text();
+		console.log(data);
+		const elementId = `lastUpdate${
+			table.charAt(0).toUpperCase() + table.slice(1)
+		}`;
+		const element = document.getElementById(elementId);
+		if (element) {
+			element.innerText = data;
+		} else {
+			console.error(`Element with ID ${elementId} not found`);
+		}
+	} catch (error) {
+		console.error("Error fetching last update:", error);
+	}
+}
+
 //функция для динамической загрузки выдачи
 function loadMoreData() {
 	if (isLoading) return;

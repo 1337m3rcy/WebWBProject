@@ -11,6 +11,7 @@ from starlette.responses import StreamingResponse
 from typing import Union, Optional
 from io import TextIOBase, BytesIO
 import os
+from datetime import datetime, timedelta
 
 import logging
 from server.app import models, database, schemas
@@ -70,6 +71,7 @@ async def get_count_data(db: Session, name: str = None, pool: int = None, pool_t
     return total_count.scalar()
 
 
+# Запись csv файла
 def generate_csv(data):
     # Создаем DataFrame из данных
     df = pd.DataFrame([{
@@ -93,7 +95,8 @@ def generate_csv(data):
 
 # Функция для применения фильтров
 def apply_filters(query, table: Optional[str], pool: Optional[int] = None, poolFilterType: Optional[str] = None,
-                  competitorsCount: Optional[int] = None, competitorsFilterType: Optional[str] = None, growthPercent: Optional[int] = None,
+                  competitorsCount: Optional[int] = None, competitorsFilterType: Optional[str] = None,
+                  growthPercent: Optional[int] = None,
                   growthFilterType: Optional[str] = None, filter: Optional[str] = None):
     filters = []
 
@@ -144,6 +147,7 @@ async def shutdown():
     await database.disconnect()
 
 
+# Получение данных из базы данных
 @app.get("/data", response_model=schemas.DataResponse)
 async def get_data(
         request: Request,
@@ -197,12 +201,35 @@ async def get_data(
     result = await db.execute(query)
     data = result.scalars().all()
 
-    logger.info(f"Query: {query}\nFilters: pool={pool}, poolFilterType={poolFilterType}, competitorsCount={competitorsCount}, competitorsFilterType={competitorsFilterType}, growthFilterType={growthFilterType}")
+    logger.info(
+        f"Query: {query}\nFilters: pool={pool}, poolFilterType={poolFilterType}, competitorsCount={competitorsCount}, competitorsFilterType={competitorsFilterType}, growthFilterType={growthFilterType}")
 
     result_data = {"data": [schemas.DataRow.from_orm(row) for row in data]}
     return result_data
 
 
+# последнее обновление таблиц
+@app.get("/last_update", response_model=str)
+async def get_last_update(table: str, db: Session = Depends(database.get_db)):
+    if table == "stat4market":
+        model = models.Stat4Market
+    elif table == "wbmytop":
+        model = models.WbMyTop
+    else:
+        return "Invalid table"
+
+    query = select(model.timestamp).order_by(desc(model.timestamp)).limit(1)
+    result = await db.execute(query)
+    last_update = result.scalar()
+
+    if last_update:
+        last_update = last_update + timedelta(hours=3)
+        return last_update.strftime("%Y-%m-%d %H:%M:%S")
+    else:
+        return "No data"
+
+
+# Количество полученных результатов по фильтру и по дефолту
 @app.get("/total_count", response_model=int)
 async def get_total_count_endpoint(
         request: Request,
@@ -235,6 +262,7 @@ async def get_total_count_endpoint(
     return total_count.scalar()
 
 
+# Функция для экспорта в csv формат
 @app.get("/export_csv")
 async def export_csv(
         request: Request,
@@ -250,7 +278,6 @@ async def export_csv(
         queryFunction: str = Query(None, alias="queryFunction"),
         filter: str = Query(None, alias="name")
 ):
-
     if table == "stat4market":
         model = models.Stat4Market
     elif table == "wbmytop":

@@ -1,5 +1,6 @@
 from typing import List, Optional
 from pydantic import BaseModel
+from datetime import datetime
 
 
 class DataRow(BaseModel):
@@ -8,6 +9,7 @@ class DataRow(BaseModel):
     pool: int
     competitors_count: int
     growth_percent: Optional[int] = None
+    timestamp: Optional[datetime]
 
     class Config:
         orm_mode = True
