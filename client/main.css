@@ -39,7 +39,7 @@ body {
 }
 table {
 	width: 100%;
-	table-layout: auto;
+	table-layout: fixed;
 	border-collapse: colapse;
 	border: 1px solid rgb(165, 114, 224, 0.6);
 }

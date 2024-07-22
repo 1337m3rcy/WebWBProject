@@ -77,8 +77,8 @@ async function fetchData(
 		.join("&");
 
 	try {
-		let url = `http://31.172.66.180:8080/data?table=${currentTable}&${filter}&skip=${skip}&limit=${limit}&queryFunction=${queryFunction}`;
-		// let url = `http://localhost:8000/data?table=${currentTable}&${filter}&skip=${skip}&limit=${limit}&queryFunction=${queryFunction}`;
+		// let url = `http://31.172.66.180:8080/data?table=${currentTable}&${filter}&skip=${skip}&limit=${limit}&queryFunction=${queryFunction}`;
+		let url = `http://localhost:8000/data?table=${currentTable}&${filter}&skip=${skip}&limit=${limit}&queryFunction=${queryFunction}`;
 		if (order && column) {
 			url += `&order=${order}&column=${column}`;
 		}
@@ -138,12 +138,12 @@ document
 			.join("&");
 
 		try {
-			// const response = await fetch(
-			// 	`http://localhost:8000/total_count?table=${currentTable}&${filter}&queryFunction=updateResults`
-			// );
 			const response = await fetch(
-				`http://31.172.66.180:8080/total_count?table=${currentTable}&${filter}&queryFunction=updateResults`
+				`http://localhost:8000/total_count?table=${currentTable}&${filter}&queryFunction=updateResults`
 			);
+			// const response = await fetch(
+			// 	`http://31.172.66.180:8080/total_count?table=${currentTable}&${filter}&queryFunction=updateResults`
+			// );
 			if (response.ok) {
 				const totalResults = await response.json();
 				document.getElementById(
@@ -186,12 +186,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function fetchLastUpdate(table) {
 	try {
-		// const response = await fetch(
-		// 	`http://localhost:8000/last_update?table=${table}`
-		// );
 		const response = await fetch(
-			`http://31.172.66.180:8080/last_update?table=${table}`
+			`http://localhost:8000/last_update?table=${table}`
 		);
+		// const response = await fetch(
+		// 	`http://31.172.66.180:8080/last_update?table=${table}`
+		// );
 		const data = await response.text();
 		console.log(data);
 		const elementId = `lastUpdate${
@@ -208,7 +208,7 @@ async function fetchLastUpdate(table) {
 	}
 }
 
-//функция для динамической загрузки выдачи
+// функция для динамической загрузки выдачи
 function loadMoreData() {
 	if (isLoading) return;
 
@@ -228,7 +228,19 @@ function loadMoreData() {
 			growthFilterType: formData.get("growthFilterType") || null,
 		};
 
-		fetchData(filterParams, skip, pageSize, "loadMoreData");
+		const headerCell = document.querySelector(
+			"th.th-sort-asc, th.th-sort-desc"
+		);
+		const order = headerCell
+			? headerCell.classList.contains("th-sort-asc")
+				? "asc"
+				: "desc"
+			: null;
+		const column = headerCell
+			? headerCell.getAttribute("data-column")
+			: null;
+
+		fetchData(filterParams, skip, pageSize, "loadMoreData", order, column);
 	}
 }
 
@@ -258,17 +270,8 @@ async function downloadCSV() {
 	NProgress.start(); // Start the progress bar for download
 
 	try {
-		// const response = await fetch(
-		// 	`http://localhost:8000/export_csv?table=${currentTable}&${filter}&queryFunction=downloadCSV`,
-		// 	{
-		// 		method: "GET",
-		// 		headers: {
-		// 			"Content-Type": "text/csv",
-		// 		},
-		// 	}
-		// );
 		const response = await fetch(
-			`http://31.172.66.180:8080/export_csv?table=${currentTable}&${filter}&queryFunction=downloadCSV`,
+			`http://localhost:8000/export_csv?table=${currentTable}&${filter}&queryFunction=downloadCSV`,
 			{
 				method: "GET",
 				headers: {
@@ -276,6 +279,15 @@ async function downloadCSV() {
 				},
 			}
 		);
+		// const response = await fetch(
+		// 	`http://31.172.66.180:8080/export_csv?table=${currentTable}&${filter}&queryFunction=downloadCSV`,
+		// 	{
+		// 		method: "GET",
+		// 		headers: {
+		// 			"Content-Type": "text/csv",
+		// 		},
+		// 	}
+		// );
 		if (!response.ok) {
 			console.error("Failed to download CSV:", response.statusText);
 			return;
@@ -382,7 +394,7 @@ function renderTable(data) {
                 <td> </td>
                 <td>${row.pool}</td>
                 <td>${row.competitors_count}</td>
-                <td>${row.growth_percent}</td>
+                <td> </td>
             `;
 
 			tr.querySelector(".table-cell").addEventListener("click", () => {
