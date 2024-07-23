@@ -321,17 +321,17 @@ document.addEventListener("DOMContentLoaded", () => {
 				headerCell
 			);
 			const currentIsAscending =
-				headerCell.classList.contains("th-sort-asc");
+				headerCell.classList.contains("th-sort-desc");
 
 			tableElement
 				.querySelectorAll("th")
 				.forEach((th) =>
 					th.classList.remove("th-sort-asc", "th-sort-desc")
 				);
-			headerCell.classList.toggle("th-sort-asc", !currentIsAscending);
-			headerCell.classList.toggle("th-sort-desc", currentIsAscending);
+			headerCell.classList.toggle("th-sort-asc", currentIsAscending);
+			headerCell.classList.toggle("th-sort-desc", !currentIsAscending);
 
-			const order = currentIsAscending ? "desc" : "asc";
+			const order = currentIsAscending ? "asc" : "desc";
 			const column = headerCell.getAttribute("data-column");
 
 			// Получаем текущие фильтры
