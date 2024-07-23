@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Index, DateTime
+from sqlalchemy import Column, Integer, String, Float, DateTime, func
 from server.app.database import Base
 
 
@@ -21,5 +21,5 @@ class WbMyTop(Base):
     categories = Column(String, index=True)
     pool = Column(Integer, index=True)
     competitors_count = Column(Integer, index=True)
-    growth_percent = Column(Integer, index=True)
+    growth_percent = Column(Float, index=True, default=func.round(0, 2))
     timestamp = Column(DateTime, index=True)

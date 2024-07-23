@@ -394,7 +394,7 @@ function renderTable(data) {
                 <td> </td>
                 <td>${row.pool}</td>
                 <td>${row.competitors_count}</td>
-                <td> </td>
+                <td>${row.growth_percent}</td>
             `;
 
 			tr.querySelector(".table-cell").addEventListener("click", () => {
