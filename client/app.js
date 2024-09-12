@@ -77,7 +77,7 @@ async function fetchData(
 		.join("&");
 
 	try {
-		let url = `http://31.172.66.180:8080/data?table=${currentTable}&${filter}&skip=${skip}&limit=${limit}&queryFunction=${queryFunction}`;
+		let url = `http://31.172.64.82:81/data?table=${currentTable}&${filter}&skip=${skip}&limit=${limit}&queryFunction=${queryFunction}`;
 		// let url = `http://localhost:8000/data?table=${currentTable}&${filter}&skip=${skip}&limit=${limit}&queryFunction=${queryFunction}`;
 		if (order && column) {
 			url += `&order=${order}&column=${column}`;
@@ -142,7 +142,7 @@ document
 			// 	`http://localhost:8000/total_count?table=${currentTable}&${filter}&queryFunction=updateResults`
 			// );
 			const response = await fetch(
-				`http://31.172.66.180:8080/total_count?table=${currentTable}&${filter}&queryFunction=updateResults`
+				`http://31.172.64.82:81/total_count?table=${currentTable}&${filter}&queryFunction=updateResults`
 			);
 			if (response.ok) {
 				const totalResults = await response.json();
@@ -190,7 +190,7 @@ async function fetchLastUpdate(table) {
 		// 	`http://localhost:8000/last_update?table=${table}`
 		// );
 		const response = await fetch(
-			`http://31.172.66.180:8080/last_update?table=${table}`
+			`http://31.172.64.82:81/last_update?table=${table}`
 		);
 		const data = await response.text();
 		console.log(data);
@@ -280,7 +280,7 @@ async function downloadCSV() {
 		// 	}
 		// );
 		const response = await fetch(
-			`http://31.172.66.180:8080/export_csv?table=${currentTable}&${filter}&queryFunction=downloadCSV`,
+			`http://31.172.64.82:81/export_csv?table=${currentTable}&${filter}&queryFunction=downloadCSV`,
 			{
 				method: "GET",
 				headers: {
