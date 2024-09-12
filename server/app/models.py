@@ -3,7 +3,7 @@ from server.app.database import Base
 
 
 class Stat4Market(Base):
-    __tablename__ = "key_query"
+    __tablename__ = "key_words"
 
     name = Column(String, primary_key=True, index=True)
     categories = Column(String, index=True)
